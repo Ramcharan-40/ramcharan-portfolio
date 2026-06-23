@@ -35,10 +35,16 @@ header{
 
 .logo{
     color: #fff;
+    
     font-size: 1.3rem;
     font-weight: 600;
     text-wrap: nowrap;
     transition: 0.3s ease-in-out;
+}
+
+.logo span {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 4px;
 }
 
 .logo:hover{
@@ -370,7 +376,7 @@ footer ul li a{
 @media (max-width: 768px){
     header{
         gap: 1rem;
-        padding: 0.5rem 1rem;
+        
     }
     header .visit-btn{
         font-size: 1rem;
@@ -395,16 +401,9 @@ footer ul li a{
 }
 
 
-@media (max-width: 480px){
-    .about img{
-        width: 80vw;
-    }
-    .skills-grid{
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    }
-}
 
-@media(max-width: 600px){
+
+@media(max-width: 768px){
     header #menu-icon{
         display: block;
     }
@@ -431,8 +430,8 @@ footer ul li a{
         display: block;
     }
     header{
-        padding: 1rem 5rem;
-        gap: 8rem;
+        
+        gap: 2rem;
     }
     header .logo{
         font-size: 1.5rem;
@@ -451,4 +450,10 @@ footer ul li a{
     footer ul{
         gap: 1rem;
     }
+
+    .btn-group{
+        flex-direction: column;
+    }
 }
+ 
+
