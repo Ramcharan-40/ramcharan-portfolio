@@ -1,459 +1,1226 @@
-*{
-    margin: 0;
-    padding: 0; 
-    box-sizing: border-box;
-    font-family: 'Poppins';
-    text-decoration: none;
-    scroll-behavior: smooth;
-    list-style: none;
+/* ==========================================================================
+   Ramcharan Aerukonda — portfolio
+   Notion-inspired design system. Plain CSS, no framework.
+
+   Contents
+   1.  Design tokens
+   2.  Reset & base
+   3.  Layout primitives
+   4.  Header & navigation
+   5.  Buttons, chips, links, tags
+   6.  Hero
+   7.  Callout & property list
+   8.  Section headings & prose
+   9.  Cards & skills
+   10. Projects
+   11. Contact
+   12. Footer
+   13. Motion
+   14. Responsive
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+   -------------------------------------------------------------------------- */
+:root {
+    /* Surfaces — off-white page, white cards, Notion's warm grays */
+    --bg-page: #fbfbfa;
+    --bg-card: #ffffff;
+    --bg-subtle: #f7f6f3;
+    --bg-hover: rgba(55, 53, 47, 0.06);
+    --bg-active: rgba(55, 53, 47, 0.10);
+
+    /* Text — muted but all above 4.5:1 on the page background */
+    --text: #37352f;
+    --text-secondary: #5f5d57;
+    --text-tertiary: #74726b;
+    --text-body: #4a4842;
+
+    /* Lines */
+    --border: rgba(55, 53, 47, 0.10);
+    --border-strong: rgba(55, 53, 47, 0.18);
+
+    /* Single restrained accent (Notion blue) */
+    --accent: #2383e2;
+    --accent-text: #2a6f9e; /* darkened for text-on-white contrast */
+    --accent-soft: #ddebf1;
+    --accent-ink: #183347;
+
+    /* Tags */
+    --tag-bg: rgba(55, 53, 47, 0.07);
+    --tag-text: #55524b;
+
+    /* Depth — hairline + a whisper of shadow, never glossy */
+    --shadow-sm: 0 1px 2px rgba(15, 15, 15, 0.04);
+    --shadow-md: 0 1px 2px rgba(15, 15, 15, 0.05), 0 4px 12px rgba(15, 15, 15, 0.06);
+
+    /* Radii — Notion stays close to the square */
+    --r-xs: 3px;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+
+    /* Type */
+    --font: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    /* Motion */
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --t-fast: 120ms;
+    --t-mid: 180ms;
+
+    /* Metrics */
+    --header-h: 52px;
+    --cover-ratio: 12 / 5;
 }
 
-section {
-  scroll-margin-top: 80px; /* adjust to match your header height */
+/* --------------------------------------------------------------------------
+   2. Reset & base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
-header{
-    position: fixed;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5rem;
-    backdrop-filter: blur(8px);
-    color: #fff;
-    padding: 0.5rem 1.5rem;
-    border-radius: 5rem;
-    z-index: 1000;
-}
-
-.logo{
-    color: #fff;
-    
-    font-size: 1.3rem;
-    font-weight: 600;
-    text-wrap: nowrap;
-    transition: 0.3s ease-in-out;
-}
-
-.logo span {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 4px;
-}
-
-.logo:hover{
-    transform: scale(1.05);
-}
-
-.nav-links{
-    display: flex;
-    gap: 1rem;
-}
-
-li a{
-    position:relative;
-    color: #fff;
-    font-weight: 300;
-}
-
-li a::before{
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 0;
-    height: 2px;
-    top:20px;
-    border-radius: 1rem;
-    background:linear-gradient(to right, rgb(0,157,255) , rgb(255,0,255));
-    transition: 0.3s ease-in-out;
-}
-
-li a:hover::before{
-    width: 100%;
-}
-
-.visit-btn{
-    padding: 0.5rem 1.5rem;
-    border-radius: 3rem;
-    border:none;
-    font-weight: 500;
+body {
+    background: var(--bg-page);
+    color: var(--text);
+    font-family: var(--font);
     font-size: 1rem;
-    color: #fff;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
     cursor: pointer;
-    text-wrap: nowrap;
-    transition: 0.3s ease-in-out;
-    background: linear-gradient(to right, rgb(0,157,255) , rgb(255,0,255));
 }
 
-.visit-btn:hover{
-    background: linear-gradient(to right, rgb(255,0,255) , rgb(0,157,255));
-    transform: scale(1.05);
-}
-
-#menu-icon{
-    font-size: 1.5rem;
-    display: none;
-}
-
-section{
-    min-height: 100vh;
-    position: relative;
-    width: 100%;
-    padding: 5rem 12%;
-}
-
-.about{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.about .about-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap:10rem;
-}
-
-.about img{
-    width:20vw;
-    border-radius: 30rem;
-}
-
-.info-box{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    gap:1.5rem;
-}
-
-.info-box h3{
-    font-size:1.8rem;
-    font-weight: 500;
-    opacity: 0.8;
-}
-
-.info-box h1{
-    font-size: 4rem;
+h1,
+h2,
+h3 {
     font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
 }
 
-.info-box span{
-    background: linear-gradient(to right, rgb(0,157,255) , rgb(255,0,255));
-    background-clip: text;
-    color: transparent;
-    font-size: 2rem;
+p {
+    text-wrap: pretty;
 }
 
-.btn-group{
-    display: flex;
-    gap: 1rem;
+::selection {
+    background: rgba(35, 131, 226, 0.24);
 }
 
-.btn{
-    border-radius: 3rem;
-    padding: 0.5rem 1.5rem;
-    border: 2px solid black;
-    cursor: pointer;
-    text-wrap: nowrap;
-    font-weight: 500;
-    transition: 0.3s ease-in-out;
-}
-
-.btn:hover{
-    background: black;
-    color: #fff;
-}
-
-.socials{
-    display: flex;
-    gap: 2rem;
-}
-
-.socials i{
-    font-size: 2rem;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-}
-
-.socials i:hover{
-    transform: scale(1.2);
-}
-
-.socials a {
-  color: inherit;
-}
-
-.socials a:hover i {
-  transform: scale(1.2);
-}
-
-.section-header{
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 500;
-    margin-bottom: 3rem;
-}
-.skills-grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-}
-.skill-card {
-    border:2px solid black;
-    border-radius: 2rem;
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-}
-
-
-.card-icon{
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.card-label{
-    font-size: 1.2rem;
-    font-weight: 500;
-    background: linear-gradient(to right, rgb(0,157,255) , rgb(255,0,255));font-weight: 500;
-    background-clip: text;
-    color: transparent;
-}
-
-.skill-card:hover{
-    background-color: black;
-    transform: scale(1.05);
-    color: #fff;
-}
-
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
 }
 
-::-webkit-scrollbar-track{
-    background-color:rgb(219,219,219)
-}
-
-::-webkit-scrollbar-thumb{
-    background: linear-gradient(to bottom, rgb(0,157,255) , rgb(255,0,255));
-    border-radius: 1rem;
-}
-
-.projects-grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.project-card{
-    border: 2px solid black;
-    border-radius: 2rem;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-}
-.project-card:hover{
-    background-color: black;
-    color: #fff;
-    transform: scale(1.05);
-}
-
-.project-card img{
-    width:auto;
-    border-radius: 1rem;
-}
-
-.project-card:hover .btn{
-    border:2px solid #fff;
+::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.project-card:hover .btn:hover{
-    background: #fff;
-    color: black;
+::-webkit-scrollbar-thumb {
+    background: rgba(55, 53, 47, 0.18);
+    border: 3px solid var(--bg-page);
+    border-radius: 8px;
 }
 
-.project-card h3{
-    font-size: 1.5rem;
-    font-weight: 500;
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(55, 53, 47, 0.3);
 }
 
-.input-box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 2rem;
-    margin-top: 5rem;
+/* Visible focus for keyboard users only */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--r-xs);
 }
 
-.input-box input{
-    width: 60vw;
-    padding: 1rem;
-    border-radius: 1rem;
-    border: 2px solid black;
-    font-size: 1rem;
-    font-family: 'Poppins';
-    margin-bottom: 1rem;
-}
-
-.input div{
-    width: 30vw;
-    
-}
-
-.input{
-    position: relative;
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-        align-items: center;
-        justify-content: center;
-}
-
-.input i{
+.sr-only {
     position: absolute;
-     font-size: 1.2rem;
-     top: 25%;
-     right: 1.5rem;
-     transform:translate(50%,-50%)
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
 }
 
-footer{
-    bottom:0;
-    left:0;
-    height: 10rem;
+.skip-link {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 200;
+    padding: 8px 14px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-160%);
+    transition: transform var(--t-mid) var(--ease);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+}
+
+.sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* Icons: line style by default, filled for brand marks */
+.icon {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icon--brand {
+    fill: currentColor;
+    stroke: none;
+}
+
+.icon--sm {
+    width: 14px;
+    height: 14px;
+}
+
+.icon--xs {
+    width: 12px;
+    height: 12px;
+}
+
+.dot {
+    color: var(--text-tertiary);
+    padding: 0 0.35em;
+}
+
+/* --------------------------------------------------------------------------
+   3. Layout primitives
+   -------------------------------------------------------------------------- */
+.container {
+    width: min(100% - 2.5rem, 62rem);
+    margin-inline: auto;
+}
+
+/* Reading column — keeps prose at a comfortable measure */
+.container--text {
+    width: min(100% - 2.5rem, 46rem);
+}
+
+.section {
+    padding-block: clamp(3.25rem, 7vw, 5.5rem);
+    scroll-margin-top: calc(var(--header-h) + 1.25rem);
+}
+
+/* Hairline dividers between sections, Notion style */
+.section + .section {
+    border-top: 1px solid var(--border);
+}
+
+.hero {
+    padding-block: clamp(2.75rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5rem);
+}
+
+/* --------------------------------------------------------------------------
+   4. Header & navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(251, 251, 250, 0.82);
+    backdrop-filter: saturate(160%) blur(10px);
+    -webkit-backdrop-filter: saturate(160%) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--t-mid) var(--ease), background var(--t-mid) var(--ease);
+}
+
+.site-header.is-scrolled {
+    border-bottom-color: var(--border);
+    background: rgba(251, 251, 250, 0.9);
+}
+
+.header-inner {
+    width: min(100% - 2rem, 62rem);
+    height: var(--header-h);
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Brand reads like a Notion breadcrumb */
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 8px;
+    margin-left: -8px;
+    border-radius: var(--r-sm);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: background var(--t-fast) var(--ease);
+}
+
+.brand:hover {
+    background: var(--bg-hover);
+}
+
+.brand-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px var(--border-strong);
+}
+
+.brand-crumb {
+    color: var(--text-tertiary);
+    font-weight: 400;
+}
+
+.site-nav {
+    margin-left: auto;
+}
+
+.nav-list {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.nav-link {
+    display: block;
+    padding: 5px 10px;
+    border-radius: var(--r-sm);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.nav-link:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.nav-link[aria-current="true"] {
+    background: var(--bg-hover);
+    color: var(--text);
+    font-weight: 500;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-sm);
+    color: var(--text-secondary);
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.menu-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.menu-toggle .icon--close,
+.menu-toggle[aria-expanded="true"] .icon--open {
+    display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .icon--close {
+    display: block;
+}
+
+/* --------------------------------------------------------------------------
+   5. Buttons, chips, links, tags
+   -------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--text);
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm);
+    transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+                box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+
+.btn:hover {
+    background: var(--bg-subtle);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+    background: var(--bg-active);
+}
+
+.btn--primary {
+    color: #fff;
+    background: var(--text);
+    border-color: var(--text);
+}
+
+.btn--primary:hover {
+    background: #2b2925;
+    border-color: #2b2925;
+}
+
+.btn--primary:active {
+    background: #221f1b;
+}
+
+.btn--primary .icon {
+    stroke-width: 1.9;
+}
+
+.btn--sm {
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.8125rem;
+}
+
+/* Nudge the icon glyph on hover — down for a download, forward for an arrow */
+.btn .icon use {
+    transition: transform var(--t-mid) var(--ease);
+}
+
+.btn:hover .icon use[href="#i-download"] {
+    transform: translateY(1.5px);
+}
+
+.btn:hover .icon use[href="#i-arrow-right"] {
+    transform: translateX(2px);
+}
+
+/* Small bordered link, used for project links */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3125rem 0.5625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+                color var(--t-fast) var(--ease);
+}
+
+.chip:hover {
+    color: var(--text);
+    background: var(--bg-subtle);
+    border-color: var(--border-strong);
+}
+
+.chip .ext {
+    color: var(--text-tertiary);
+    transition: color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+
+.chip:hover .ext {
+    color: var(--text-secondary);
+    transform: translate(1px, -1px);
+}
+
+.chip-note {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    /* One step darker than the other muted text: it sits on the tinted
+       pill background, which would otherwise drop it below 4.5:1. */
+    color: var(--text-secondary);
+    background: var(--bg-subtle);
+    padding: 1px 5px;
+    border-radius: var(--r-xs);
+}
+
+/* Plain inline link with an icon */
+.text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.4rem;
+    margin-left: -0.4rem;
+    border-radius: var(--r-sm);
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.text-link:hover {
+    color: var(--text);
+    background: var(--bg-hover);
+}
+
+.text-link .ext {
+    color: var(--text-tertiary);
+    transition: transform var(--t-fast) var(--ease);
+}
+
+.text-link:hover .ext {
+    transform: translate(1px, -1px);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.tag {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    padding: 0.125rem 0.5rem;
+    color: var(--tag-text);
+    background: var(--tag-bg);
+    border-radius: var(--r-sm);
+    white-space: nowrap;
+}
+
+.tag--accent {
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    color: var(--text-tertiary);
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.icon-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.icon-btn .icon--done,
+.icon-btn.is-copied .icon--idle {
+    display: none;
+}
+
+.icon-btn.is-copied .icon--done {
+    display: block;
+    color: #0f7b6c; /* Notion green */
+}
+
+/* --------------------------------------------------------------------------
+   6. Hero
+   -------------------------------------------------------------------------- */
+.hero-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-sm);
+    margin-bottom: 1.25rem;
+}
+
+.hero-title {
+    font-size: clamp(1.875rem, 5.2vw, 2.625rem);
+    font-weight: 700;
+    letter-spacing: -0.028em;
+    line-height: 1.12;
+}
+
+.hero-role {
+    margin-top: 0.5rem;
+    font-size: clamp(0.9375rem, 2vw, 1.0625rem);
+    color: var(--text-secondary);
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-top: 1.75rem;
+}
+
+.hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   7. Callout & property list
+   -------------------------------------------------------------------------- */
+.callout {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding: 1rem 1.125rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+}
+
+.callout-icon {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.callout p {
+    font-size: 0.9375rem;
+    color: var(--text);
+}
+
+.props {
+    display: grid;
+    gap: 0.5rem 2rem;
+    margin-top: 1.75rem;
+}
+
+.prop {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.prop dt {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex: none;
+    width: 6.5rem;
+    color: var(--text-tertiary);
+}
+
+.prop dt .icon {
+    width: 14px;
+    height: 14px;
+    position: relative;
+    top: 2px;
+}
+
+.prop dd {
+    color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   8. Section headings & prose
+   -------------------------------------------------------------------------- */
+.section-head {
+    margin-bottom: 1.75rem;
+}
+
+.section-title {
+    position: relative;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Notion reveals a link handle when you hover a heading */
+.heading-anchor {
+    position: absolute;
+    left: -1.25rem;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.section-title:hover .heading-anchor,
+.heading-anchor:focus-visible {
+    opacity: 1;
+}
+
+.heading-anchor:hover {
+    color: var(--text-secondary);
+}
+
+.section-sub {
+    margin-top: 0.375rem;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+}
+
+.prose p + p {
+    margin-top: 1rem;
+}
+
+.prose p {
+    font-size: 1rem;
+    color: var(--text-body);
+}
+
+.prose em {
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   9. Cards & skills
+   -------------------------------------------------------------------------- */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease),
+                transform var(--t-mid) var(--ease);
+}
+
+.card-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.card-grid--skills {
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.skill-card {
+    padding: 1.125rem 1.25rem 1.25rem;
+}
+
+.skill-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.875rem;
+}
+
+.card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: var(--r-sm);
+    color: var(--text-secondary);
+    background: var(--bg-subtle);
+    transition: color var(--t-mid) var(--ease), background var(--t-mid) var(--ease);
+}
+
+.skill-card:hover .card-icon {
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.card-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   10. Projects
+   -------------------------------------------------------------------------- */
+.card-grid--projects {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 1.25rem;
+}
+
+.project {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.project:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
+.project-cover {
+    aspect-ratio: var(--cover-ratio);
+    overflow: hidden;
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+}
+
+.project-cover img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 400ms var(--ease);
+}
+
+.project:hover .project-cover img {
+    transform: scale(1.015);
+}
+
+/* Stand-in cover: a map of the deployed interfaces */
+.project-cover--map {
+    display: grid;
+    place-items: center;
+    padding: 0.875rem;
+    background-color: var(--bg-subtle);
+    background-image: radial-gradient(rgba(55, 53, 47, 0.11) 1px, transparent 1px);
+    background-size: 14px 14px;
+}
+
+.iface-map {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 22rem;
+}
+
+.iface-map li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4375rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.iface-map .icon {
+    width: 13px;
+    height: 13px;
+    color: var(--text-tertiary);
+}
+
+.project-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.25rem 1.375rem 1.375rem;
+}
+
+.project-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.project-kicker {
+    margin-top: 0.125rem;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+}
+
+.project-desc {
+    margin-top: 0.875rem;
+    font-size: 0.9375rem;
+    color: var(--text-body);
+}
+
+.tags--tech {
+    margin-top: 1rem;
+}
+
+.project-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+}
+
+.link-group-label {
+    margin-bottom: 0.4375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+}
+
+.link-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+/* --------------------------------------------------------------------------
+   11. Contact
+   -------------------------------------------------------------------------- */
+.contact-list {
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.contact-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    transition: background var(--t-fast) var(--ease);
+}
+
+.contact-row + .contact-row {
+    border-top: 1px solid var(--border);
+}
+
+.contact-row:hover {
+    background: var(--bg-subtle);
+}
+
+.contact-icon {
+    display: inline-flex;
+    color: var(--text-tertiary);
+}
+
+.contact-label {
+    flex: none;
+    width: 4.5rem;
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+}
+
+.contact-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--border-strong);
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+    overflow-wrap: anywhere;
+}
+
+.contact-value:hover {
+    color: var(--accent-text);
+    border-color: var(--accent-text);
+}
+
+.contact-value .ext {
+    color: var(--text-tertiary);
+}
+
+.contact-row .icon-btn {
+    margin-left: auto;
+}
+
+.contact-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-top: 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   12. Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+    border-top: 1px solid var(--border);
+    padding-block: 2.5rem 3rem;
+}
+
+.footer-inner {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: center;
+    text-align: center;
+}
+
+.footer-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 0.25rem 0.5rem;
 }
 
-footer ul{
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+.footer-nav a {
+    display: block;
+    padding: 4px 8px;
+    border-radius: var(--r-sm);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 
-footer ul{
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+.footer-nav a:hover {
+    background: var(--bg-hover);
+    color: var(--text);
 }
 
-footer ul li a{
-    color: #000;
-    font-weight: 500;
-    transition: 0.3s ease-in-out;
+.footer-meta {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
 }
 
-.copyright{
-    font-size: 0.9rem;
-    color: #000;
-    opacity: 0.5;
-}
-
-@media (max-width: 768px){
-    header{
-        gap: 1rem;
-        
+/* --------------------------------------------------------------------------
+   13. Motion
+   -------------------------------------------------------------------------- */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
-    header .visit-btn{
-        font-size: 1rem;
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Hero entrance — runs on load, staggered top to bottom */
+.js .anim {
+    animation: rise 520ms var(--ease) both;
+}
+
+.js .hero-avatar  { animation-delay: 40ms; }
+.js .hero-title   { animation-delay: 90ms; }
+.js .hero-role    { animation-delay: 140ms; }
+.js .hero .callout{ animation-delay: 190ms; }
+.js .hero .props  { animation-delay: 240ms; }
+.js .hero-actions { animation-delay: 290ms; }
+.js .hero-links   { animation-delay: 340ms; }
+
+/* Scroll reveals — hidden only when JS can bring them back */
+.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    transition: opacity 520ms var(--ease), transform 520ms var(--ease);
+}
+
+/* Stagger grouped cards */
+.js .card-grid > [data-reveal].is-visible:nth-child(2) { transition-delay: 60ms; }
+.js .card-grid > [data-reveal].is-visible:nth-child(3) { transition-delay: 120ms; }
+.js .card-grid > [data-reveal].is-visible:nth-child(4) { transition-delay: 180ms; }
+.js .card-grid > [data-reveal].is-visible:nth-child(5) { transition-delay: 240ms; }
+.js .card-grid > [data-reveal].is-visible:nth-child(6) { transition-delay: 300ms; }
+.js .card-grid > [data-reveal].is-visible:nth-child(7) { transition-delay: 360ms; }
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+    }
+
+    .js [data-reveal],
+    .js .anim {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .card:hover,
+    .btn:hover,
+    .project:hover .project-cover img {
+        transform: none !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   14. Responsive
+   -------------------------------------------------------------------------- */
+@media (min-width: 40rem) {
+    .props {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Tablet & below: nav collapses into a Notion-style dropdown panel */
+@media (max-width: 54rem) {
+    .menu-toggle {
+        display: inline-flex;
+    }
+
+    /* The handle sits in the left gutter, which narrow viewports don't have */
+    .heading-anchor {
         display: none;
     }
-    .nav-links{
-        display: none;
-    }
-    #menu-icon{
-        display: block;
-    }
-    .about .about-container{
-        flex-direction: column;
-        gap: 2rem;
-    }
-    .about img{
-        width: 50vw;
-    }
-    .skills-grid{
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-}
 
-
-
-
-@media(max-width: 768px){
-    header #menu-icon{
-        display: block;
-    }
-    .nav-links{
+    .nav-list {
         position: absolute;
-        top: 100%;
-        margin-top: 0.5rem;
-        width: 100%;
-        padding: 0.5rem;
-        color: #fff;
-        display: flex;
+        top: calc(var(--header-h) - 2px);
+        right: 1rem;
+        left: 1rem;
         flex-direction: column;
-        text-align: center;
-        background: rgba(0,0,0,0.8);
-        border-radius: 0.5rem;
-        display: none;
-    }
-    .nav-links li{
-        margin-top: 0.5rem;
-        padding: 0.5rem;
+        align-items: stretch;
+        gap: 1px;
+        padding: 0.375rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        box-shadow: 0 1px 2px rgba(15, 15, 15, 0.06), 0 8px 24px rgba(15, 15, 15, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px) scale(0.985);
+        transform-origin: top right;
+        transition: opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--ease),
+                    visibility var(--t-mid) var(--ease);
     }
 
-    .nav-links.active{
-        display: block;
-    }
-    header{
-        
-        gap: 2rem;
-    }
-    header .logo{
-        font-size: 1.5rem;
-    }
-    .about-container img{
-        width: 40vw;
-    }
-    .input-box input{
-        padding: 0.5rem 3rem;
-        width: 80%;
-        font-size: 1.5rem;
-    }
-    .input-box input::placeholder{
-        font-size: 1.5rem;
-    }
-    footer ul{
-        gap: 1rem;
+    .nav-list.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
     }
 
-    .btn-group{
-        flex-direction: column;
+    .nav-link {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.9375rem;
     }
 }
- 
 
+@media (max-width: 30rem) {
+    .container,
+    .container--text {
+        width: min(100% - 1.75rem, 62rem);
+    }
+
+    .header-inner {
+        width: min(100% - 1.5rem, 62rem);
+    }
+
+    .brand-crumb {
+        display: none;
+    }
+
+    .btn--sm .btn-label {
+        display: none;
+    }
+
+    .btn--sm {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+    }
+
+    .hero-actions .btn {
+        flex: 1 1 100%;
+    }
+
+    .prop {
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+
+    .prop dt {
+        width: auto;
+    }
+
+    .contact-row {
+        flex-wrap: wrap;
+        row-gap: 0.25rem;
+        padding: 0.875rem 0.875rem;
+    }
+
+    .contact-label {
+        width: auto;
+    }
+
+    .contact-value {
+        flex-basis: 100%;
+        margin-left: 1.75rem;
+    }
+
+    .contact-row .icon-btn {
+        position: absolute;
+        right: 0.5rem;
+    }
+
+    .iface-map {
+        gap: 0.375rem;
+    }
+
+    .contact-cta .btn {
+        flex: 1 1 100%;
+    }
+}
